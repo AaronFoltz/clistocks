@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+from xml.dom.minidom import parseString
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib import urlopen
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode
+from sys import argv, exit, stderr
+import os.path
+import csv
+
+
+def main():
+    try:
+        stock = argv[1];
+        getPrice(stock);
+    except IndexError:
+        stock = "GOOG"
+        getPrice(stock);
+    
+def getPrice(stock):
+    print(stock)
+    # Call to get the stock price
+    api = 'http://download.finance.yahoo.com/d/quotes.csv?%s&f=nsl1op&e=.csv' % urlencode({'s': stock})
+    print(urlopen(api).read())
+    result = (urlopen(api).read()).split(",");
+
+    for item in result:
+        print(item)
+
+if __name__ == "__main__":
+    main()
